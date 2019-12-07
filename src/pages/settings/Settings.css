@@ -1,0 +1,51 @@
+.settings-content ion-list {
+    height: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+.settings-content ion-list ion-list-header {
+  background-color: var(--ion-tab-bar-color-activated);
+  color: var(--ion-tab-bar-color);
+  width: 100%;
+  flex: 0;
+}
+
+.settings-content ion-list ion-list-header ion-label {
+}
+
+.settings-content ion-list .spacer {
+  flex: 1;
+}
+
+.settings-content ion-list ion-item {
+  text-align: left;
+  display: flex;
+  margin: auto;
+  min-width: 300px;
+}
+
+.settings-content ion-list ion-item ion-label {
+  flex: 1;
+}
+.settings-content ion-list ion-item ion-button {
+  flex: 1;
+  text-align: right;
+}
+
+.settings-content ion-list ion-item ion-select {
+  flex: 1;
+  text-align: right;
+  width: 100px;
+}
+
+.settings-content ion-list .led-item {
+  flex-direction: column;
+}
+
+.settings-content ion-list .led-item ion-label {
+  width: 270px;
+}

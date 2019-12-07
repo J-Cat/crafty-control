@@ -1,0 +1,139 @@
+:host(open) .inner-scroll {
+      display: flex;
+}
+.content ion-list {
+    width: 100%; 
+    height: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+.content ion-list ion-list-header {
+  background-color: var(--ion-tab-bar-color-activated);
+  color: var(--ion-tab-bar-color);
+  width: 100%;
+  flex: 0;
+}
+
+.content ion-list ion-list-header ion-label {
+  margin: auto;
+}
+
+.content ion-list .spacer {
+  flex: 1;
+}
+
+.content ion-list ion-item {
+  text-align: center;
+  flex: 0 1 1;
+  display: flex;
+  padding: 15px 0px 15px 0px;
+}
+
+.content ion-list ion-item ion-button {
+  margin: auto;
+}
+
+.content ion-list ion-item ion-label {
+  margin: auto;
+}
+
+.content .temperature-label {
+  font-size: 3em;
+  font-weight: bold;
+  min-width: 200px;
+  max-width: 200px;
+  text-align: right;
+  color: var(--ion-color-primary)
+}
+
+.content .setpoint-item {
+}
+
+.content .setpoint-button {
+  flex: 0 1;
+  width: 40px;
+  height: 40px;
+  --ion-color-primary: var(--ion-color-dark-tint);
+}
+
+.content .setpoint-input {
+  font-size: 3em;
+  font-weight: bold;
+  color: var(--ion-color-dark-tint);
+  margin: auto;
+  flex: 1 1 0%;
+  margin: 0px 10px 0px 10px;
+  min-width: 200px;
+  max-width: 200px;
+  text-align: right;
+}
+
+.content .setpoint-item .spacer {
+  flex: 1 1;
+}
+
+.content .setpoint-item ion-icon {
+  width: 36px;
+}
+
+.battery-container {
+  fill: transparent;
+  stroke: var(--ion-color-medium);
+}
+
+.battery-button {
+  fill: var(--ion-color-medium);
+}
+
+.battery-text {
+  fill: var(--ion-color-dark-tint);
+}
+
+.battery-gauge {
+  fill: var(--ion-color-primary);
+}
+
+.content .booster {
+  --ion-item-background: var(--ion-color-primary);
+  --ion-item-color: var(--ion-color-primary-contrast);
+  height: 40px;
+  flex: 1;
+  padding-bottom: 0px;
+}
+
+.content .booster .booster-title {
+  font-size: .7em;
+  margin-bottom: 5px;
+}
+
+.content .booster .booster-value {
+
+}
+
+.content .booster .booster-row {
+  flex-direction: row;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  text-align: center;
+  width: 100%;
+  align-items: center;
+}
+
+.content .booster .booster-row .booster-text {
+  flex-direction: column;
+  flex: 1;
+}
+
+.content .booster .booster-row .booster-button {
+  --ion-color-primary: var(--ion-color-primary-contrast);
+  color: var(--ion-color-dark-tint);
+  padding: 0px 5px 0px 5px;
+  margin: 0px;
+  width: 50px;
+  height: 30px;
+  margin: 0;
+}

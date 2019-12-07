@@ -1,0 +1,41 @@
+:host(open) .inner-scroll {
+      display: flex;
+}
+.content ion-list {
+    width: 100%; 
+    height: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+.content ion-list ion-list-header {
+  background-color: var(--ion-tab-bar-color-activated);
+  color: var(--ion-tab-bar-color);
+  width: 100%;
+  flex: 0;
+}
+
+.content ion-list ion-list-header ion-label {
+  margin: auto;
+}
+
+.content ion-list .spacer {
+  flex: 1;
+}
+
+.content ion-list ion-item {
+  text-align: center;
+  flex: 0 1 1;
+  display: flex;
+}
+
+.content ion-list ion-item ion-button {
+  margin: auto;
+}
+
+.content ion-list ion-item ion-label {
+  margin: auto;
+}
