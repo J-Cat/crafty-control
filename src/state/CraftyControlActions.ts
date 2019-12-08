@@ -17,4 +17,6 @@ export const CraftyControlActions = {
     setModel: 'CRAFTY/SET_MODEL',
     setVersion: 'CRAFTY/SET_VERSION',
     setHoursOfOperation: 'CRAFTY/SET_HOURS_OF_OP',
+    setPointStepChanged: 'CRAFTY/SETPOINT_STEP',
+    boostStepChanged: 'CRAFTY/BOOST_STEP',
 };

@@ -4,10 +4,14 @@ import { IAction } from './IAction';
 import { ICraftyControlState, TemperatureUnit } from './ICraftyControlState';
 
 const units = localStorage.getItem('crafty-control-units');
+const setPointStep = localStorage.getItem('crafty-control-setpoint-step');
+const boostStep = localStorage.getItem('crafty-control-boost-step');
 
 const initialState: ICraftyControlState = {
     settings: {
-        units: units ? parseInt(units) as TemperatureUnit : TemperatureUnit.C
+        units: units ? parseInt(units) as TemperatureUnit : TemperatureUnit.C,
+        setPointStep: setPointStep ? parseInt(setPointStep) as number : 5,
+        boostStep: boostStep ? parseInt(boostStep) as number : 1,
     },
     info: {
         serial: '',
@@ -94,6 +98,28 @@ const reducer = (state: ICraftyControlState = initialState, action: IAction) => 
         };
     }
 
+    case CraftyControlActions.setPointStepChanged: {
+        localStorage.setItem("crafty-control-setpoint-step", (action.payload as TemperatureUnit).toString());
+        return {
+            ...state,
+            settings: {
+                ...state.settings,
+                setPointStep: action.payload
+            }
+        };
+    }
+
+    case CraftyControlActions.boostStepChanged: {
+        localStorage.setItem("crafty-control-boost-step", (action.payload as TemperatureUnit).toString());
+        return {
+            ...state,
+            settings: {
+                ...state.settings,
+                boostStep: action.payload
+            }
+        };
+    }
+
     case CraftyControlActions.updateSettings: {
         return {
             ...state,
@@ -159,7 +185,7 @@ export const AppContext = React.createContext<{state: ICraftyControlState, dispa
 export const AppConsumer = AppContext.Consumer;
 
 export function AppProvider(props: any) {
-  const [state, dispatch] = React.useReducer(reducer, initialState)
+  const [state, dispatch] = React.useReducer(reducer, initialState as never)
   const value = { state, dispatch };
 
   return (

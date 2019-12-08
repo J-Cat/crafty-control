@@ -5,7 +5,9 @@ export enum TemperatureUnit {
 
 export interface ICraftyControlState {
     readonly settings: {
-        units: TemperatureUnit;
+        readonly units: TemperatureUnit;
+        readonly setPointStep: number;
+        readonly boostStep: number;
     };
     readonly info: {
         serial: string;

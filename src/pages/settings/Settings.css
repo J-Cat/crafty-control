@@ -31,6 +31,10 @@
 .settings-content ion-list ion-item ion-label {
   flex: 1;
 }
+.settings-content ion-list ion-item ion-input {
+  flex: 1;
+  text-align: right;
+}
 .settings-content ion-list ion-item ion-button {
   flex: 1;
   text-align: right;

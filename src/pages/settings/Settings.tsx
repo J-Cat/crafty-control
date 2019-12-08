@@ -14,6 +14,7 @@ import {
   IonToggle,
   IonRange,
   IonRow,
+  IonInput,
 } from '@ionic/react';
 import React, { useContext, useState, useEffect } from 'react';
 import './Settings.css';
@@ -21,15 +22,18 @@ import { AppContext } from '../../state/State';
 import { ICraftyControlState, TemperatureUnit } from '../../state/ICraftyControlState';
 import { IAction } from '../../state/IAction';
 import { RouteComponentProps, Redirect } from 'react-router';
-import { SelectChangeEventDetail, ToggleChangeEventDetail, RangeChangeEventDetail } from '@ionic/core';
+import { SelectChangeEventDetail, ToggleChangeEventDetail, RangeChangeEventDetail, InputChangeEventDetail } from '@ionic/core';
 import { CraftyControlActions } from '../../state/CraftyControlActions';
 import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
+import { isNumber } from 'util';
 
 const Settings: React.FC<RouteComponentProps> = ({ history }) => {
   const { state, dispatch } = useContext(AppContext) as { state: ICraftyControlState, dispatch: React.Dispatch<IAction> };
   const [vibration, setVibration] = useState(() => ((state.craftySettings & 1) !== 1));
   const [charge, setCharge] = useState(() => ((state.craftySettings & 2) !== 2));
   const [led, setLed] = useState(-1);
+  const [setPointStep, setSetPointStep] = useState(() => state.settings.setPointStep);
+  const [boostStep, setBoostStep] = useState(() => state.settings.boostStep);
   let newLed: number | undefined;
 
   useEffect(() => {
@@ -44,10 +48,18 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
     }
 
     if (led === -1 && state.led >= 0) {
-      console.log(`SET LED: ${state.led}`);
       setLed(state.led);
     }
-  }, [state.led, led]);
+
+    if (setPointStep !== state.settings.setPointStep) {
+      setSetPointStep(state.settings.setPointStep);
+    }
+
+    if (boostStep !== state.settings.boostStep) {
+      setBoostStep(state.settings.boostStep);
+    }
+
+  }, [state.craftySettings, vibration, charge, state.led, led, setPointStep, state.settings.setPointStep, boostStep, state.settings.boostStep]);
 
   const onUnitsChanged = (event: CustomEvent<SelectChangeEventDetail>) => {
     const value = (event.target as any).value as TemperatureUnit;
@@ -112,6 +124,20 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
     }
   }
 
+  const onStepChanged = (event: CustomEvent<InputChangeEventDetail>) => {
+    const value = parseInt((event.target as any).value);
+  if (isNumber(value) && value > 0 && value <= 10) {
+      dispatch({ type: CraftyControlActions.setPointStepChanged, payload: value });
+    }
+  }
+
+  const onBoostStepChanged = (event: CustomEvent<InputChangeEventDetail>) => {
+    const value = parseInt((event.target as any).value);
+    if (isNumber(value) && value > 0 && value <= 5) {
+      dispatch({ type: CraftyControlActions.boostStepChanged, payload: value });
+    }
+  }
+
   return (
     !state.connected ? <Redirect to="/connect" /> :
       <IonPage>
@@ -133,6 +159,14 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
                 <IonSelectOption value={TemperatureUnit.C}>&deg;C</IonSelectOption>
                 <IonSelectOption value={TemperatureUnit.F}>&deg;F</IonSelectOption>
               </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Set Point Step</IonLabel>
+              <IonInput inputMode="numeric" value={setPointStep.toFixed(0)} type="number" min="1" max="10" onIonChange={onStepChanged} disabled={state.updating} />
+            </IonItem>
+            <IonItem>
+              <IonLabel>Booster Step</IonLabel>
+              <IonInput inputMode="numeric" value={boostStep.toFixed(0)} type="number" min="1" max="5" onIonChange={onBoostStepChanged} disabled={state.updating} />
             </IonItem>
             <IonItem>
               <IonLabel>Vibration</IonLabel>
