@@ -41,7 +41,7 @@ const Connect: React.FC<RouteComponentProps> = ({history}) => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonImg slot="start" src={`${process.env.PUBLIC_URL}assets/icon/favicon.png`} style={{width: 40, height: 40, margin: 8 }} />
+            <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{textAlign: 'center', paddingRight: 56}}>Crafty Control</IonTitle>
           </IonToolbar>
         </IonHeader>

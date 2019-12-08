@@ -4,8 +4,8 @@
   "icons": [
     {
       "src": "assets/icon/favicon.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "sizes": "144x144 64x64 32x32 24x24 16x16",
+      "type": "image/png"
     },
     {
       "src": "assets/icon/icon.png",
@@ -14,7 +14,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/",
+  "start_url": "/crafty/",
   "display": "standalone",
   "theme_color": "#ffffff",
   "background_color": "#ffffff"
