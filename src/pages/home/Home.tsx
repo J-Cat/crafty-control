@@ -24,7 +24,7 @@ import { Redirect } from 'react-router';
 import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
 
 const Home: React.FC = () => {
-  const { state, dispatch } = useContext(AppContext) as {state: ICraftyControlState, dispatch: React.Dispatch<IAction>};
+  const { state } = useContext(AppContext) as {state: ICraftyControlState, dispatch: React.Dispatch<IAction>};
   const [ sp, setSP ] = useState(-1);
   const [ spDialogOpen, setSPDialogOpen ] = useState(false);
 

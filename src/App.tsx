@@ -40,7 +40,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 const App: React.FC = () => {
-  const { state, dispatch } = useContext(AppContext) as {state: ICraftyControlState, dispatch: React.Dispatch<IAction>};
+  const { state } = useContext(AppContext) as {state: ICraftyControlState, dispatch: React.Dispatch<IAction>};
 
   return (
     <IonApp>

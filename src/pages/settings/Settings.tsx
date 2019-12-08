@@ -9,7 +9,6 @@ import {
   IonTitle,
   IonToolbar,
   IonImg,
-  IonInput,
   IonSelect,
   IonSelectOption,
   IonToggle,
