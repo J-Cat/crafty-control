@@ -9,7 +9,7 @@ import {
   IonTabButton,
   IonTabs
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import { IonReactHashRouter } from '@ionic/react-router';
 import { thermometer, settings, information } from 'ionicons/icons';
 import { AppContext } from './state/State';
 import { ICraftyControlState } from './state/ICraftyControlState';
@@ -44,7 +44,7 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      <IonReactRouter>
+      <IonReactHashRouter>
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/connect" component={Connect} exact={true} />
@@ -68,7 +68,7 @@ const App: React.FC = () => {
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
-      </IonReactRouter>
+      </IonReactHashRouter>
     </IonApp>
   );
 };

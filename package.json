@@ -11,9 +11,11 @@
     "@types/react-dom": "^16.9.1",
     "@types/react-router": "^5.1.1",
     "@types/react-router-dom": "^5.1.0",
+    "babel-polyfill": "^6.26.0",
     "date-fns": "^2.8.1",
     "ionicons": "^4.6.3",
     "react": "^16.10.2",
+    "react-app-polyfill": "^1.0.5",
     "react-dom": "^16.10.2",
     "react-router": "^5.1.0",
     "react-router-dom": "^5.1.0",
@@ -39,10 +41,11 @@
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie >= 11"
     ]
   },
-  "description": "An Ionic project",
+  "description": "Crafty Control Application",
   "devDependencies": {
     "@types/date-fns": "^2.6.0",
     "@types/web-bluetooth": "0.0.4"

@@ -11,41 +11,43 @@ import {
   IonImg,
   IonIcon,
   IonButton,
-  IonRow
+  IonRow,
+  IonAlert
 } from '@ionic/react';
 import { add, remove } from 'ionicons/icons';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import './Home.css';
 import { AppContext } from '../../state/State';
 import { ICraftyControlState, TemperatureUnit } from '../../state/ICraftyControlState';
 import { IAction } from '../../state/IAction';
 import { Redirect } from 'react-router';
-import { InputChangeEventDetail } from '@ionic/core';
 import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
-import { Battery } from 'react-visual-graphic';
 
 const Home: React.FC = () => {
   const { state, dispatch } = useContext(AppContext) as {state: ICraftyControlState, dispatch: React.Dispatch<IAction>};
+  const [ sp, setSP ] = useState(-1);
+  const [ spDialogOpen, setSPDialogOpen ] = useState(false);
 
-  let setPoint = state.setPoint;
-
-  const setPointChange = (event: CustomEvent<InputChangeEventDetail>) => {
-    setPoint = (event.target as any).value as number;
-  }
-
-  const setPointFinishChange = (event: CustomEvent<void>) => {
-    CraftyControl.updateSetPoint(Math.floor(setPoint)).then(() => {
-      alert('updated');
-    });
-    // dispatch({type: CraftyControlActions.updateSetPoint, payload: setPoint });
-  }
+  useEffect(() => {
+    if ((sp <= 0 || !spDialogOpen) && (sp !== state.setPoint)) {
+      setSP(state.setPoint);
+    }
+  }, [state.setPoint, spDialogOpen, sp]);
 
   const updateSetPoint = (value: number) => {
-    CraftyControl.updateSetPoint(Math.floor(value));
+    const min = state.settings.units === TemperatureUnit.C ? 40 : 104;
+    const max = state.settings.units === TemperatureUnit.C ? 210 : 410;
+    if (value >= min && value <= max) {
+      CraftyControl.updateSetPoint(Math.floor(value));
+    }
   }
 
   const updateBoost = (value: number) => {
-    CraftyControl.updateBoost(Math.floor(value));
+    const min = state.settings.units === TemperatureUnit.C ? 40 : 104;
+    const max = state.settings.units === TemperatureUnit.C ? 210 : 410;
+    if (((state.setPoint + value) <= max) && (state.setPoint + value) >= min) {
+      CraftyControl.updateBoost(Math.floor(value));
+    }
   }
 
   return (
@@ -53,7 +55,7 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonImg slot="start" src="assets/icon/favicon.png" style={{width: 40, height: 40, margin: 8 }} />
+          <IonImg slot="start" src={`${process.env.PUBLIC_URL}assets/icon/favicon.png`} style={{width: 40, height: 40, margin: 8 }} />
           <IonTitle style={{textAlign: 'center', paddingRight: 56}}>Crafty Control</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -71,7 +73,7 @@ const Home: React.FC = () => {
             <IonButton class="setpoint-button" onClick={() => updateSetPoint(state.setPoint-1)}>
               <IonIcon icon={remove} />
             </IonButton>
-            <IonLabel class="setpoint-input">{setPoint.toFixed(1)}&deg;{state.settings.units === TemperatureUnit.C ? "C" : "F"}</IonLabel>
+            <IonLabel class="setpoint-input" onClick={() => setSPDialogOpen(true)}>{state.setPoint.toFixed(1)}&deg;{state.settings.units === TemperatureUnit.C ? "C" : "F"}</IonLabel>
             <IonButton class="setpoint-button" onClick={() => updateSetPoint(state.setPoint+1)} >
               <IonIcon icon={add} />
             </IonButton>
@@ -81,7 +83,7 @@ const Home: React.FC = () => {
             <IonIcon class="spacer" />
             <svg width= {200} height= {60} className="battery" key={state.batteryPercent}>
               <rect width={180} height={40} 
-                stroke="#CCC" stroke-width={2} 
+                stroke="#CCC" strokeWidth={2} 
                 x={5} y={5} rx={10} ry={10} 
                 className="battery-container" />
               <rect 
@@ -116,6 +118,24 @@ const Home: React.FC = () => {
           </IonItem>
         </IonList>
       </IonContent>
+      <IonAlert
+          isOpen={spDialogOpen}
+          onDidDismiss={() => setSPDialogOpen(false)}
+          header="Set Point"
+          message="Please enter a new set point value"
+          inputs={[{
+             name: 'setPoint',
+             label: 'Set Point',
+             type: 'number',
+             value: sp
+          }]}
+          buttons={[{
+            text: 'Ok',
+            handler: (values) => {
+              updateSetPoint(values.setPoint);
+            }
+          }]}
+        />
     </IonPage>
   );
 };
