@@ -23,7 +23,13 @@
 }
 
 .content ion-list .spacer {
-  flex: 1;
+  flex: 1 1 0px;
+}
+
+.content ion-list .spacer-home {
+  flex: 1 0 0px;
+  min-height: 0px;
+  padding: 0px;
 }
 
 .content ion-list ion-item {
@@ -42,7 +48,7 @@
 }
 
 .content .temperature-label {
-  font-size: 3em;
+  font-size: 2.5em;
   font-weight: bold;
   min-width: 200px;
   max-width: 200px;
@@ -61,7 +67,7 @@
 }
 
 .content .setpoint-input {
-  font-size: 3em;
+  font-size: 2.5em;
   font-weight: bold;
   color: var(--ion-color-dark-tint);
   margin: auto;
@@ -101,6 +107,8 @@
   --ion-item-background: var(--ion-color-primary);
   --ion-item-color: var(--ion-color-primary-contrast);
   height: 40px;
+  min-height: 70px;
+  max-height: 70px;
   flex: 1;
   padding-bottom: 0px;
 }

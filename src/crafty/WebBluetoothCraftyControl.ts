@@ -19,15 +19,10 @@ class WebBluetoothCraftyControl implements ICraftyControl {
         this.dispatch = dispatch;
 
         return new Promise<void>((resolve, reject) => {
-            const deviceFilter: BluetoothRequestDeviceFilter = {
-                serviceDataUUID: CraftyUuids.ServiceUuid,
-                name: "STORZ&BICKEL",
-            }
-
             navigator.bluetooth.requestDevice({
-                optionalServices: [CraftyUuids.ServiceUuid, CraftyUuids.MiscDataUuid, CraftyUuids.MetaDataUuid],
-                filters: [deviceFilter],
-                //acceptAllDevices: true
+                filters: [{name: "Storz&Bickel"}, {name: "STORZ&BICKEL"}],
+                optionalServices: [CraftyUuids.ServiceUuid, CraftyUuids.MetaDataUuid, CraftyUuids.MiscDataUuid],
+                // acceptAllDevices: true
             }).then((device) => {
                 if (device && device.gatt) {
                     this.dispatch!({ type: CraftyControlActions.connecting });
@@ -35,7 +30,11 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                 }
             }).then((server) => {
                 if (server) {
-                    return server.getPrimaryServices();
+                    return Promise.all([
+                        server.getPrimaryService(CraftyUuids.ServiceUuid),
+                        server.getPrimaryService(CraftyUuids.MetaDataUuid),
+                        server.getPrimaryService(CraftyUuids.MiscDataUuid),
+                    ]);
                 }
             }).then((services) => {
                 const promises = [];

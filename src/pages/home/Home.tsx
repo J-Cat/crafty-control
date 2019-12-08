@@ -75,7 +75,7 @@ const Home: React.FC = () => {
             <IonListHeader>
               <IonLabel>Temperature</IonLabel>
             </IonListHeader>
-            <IonItem class="spacer" />
+            <IonItem class="spacer-home" />
             <IonItem class="temperature-item">
               <IonLabel class="temperature-label">{state.temperature.toFixed(1)}&deg;{state.settings.units === TemperatureUnit.C ? "C" : "F"}</IonLabel>
             </IonItem>
@@ -111,7 +111,7 @@ const Home: React.FC = () => {
               </svg>
               <IonIcon class="spacer" />
             </IonItem>
-            <IonItem class="spacer" />
+            <IonItem class="spacer-home" />
             <IonItem class="booster">
               <IonRow class="booster-row">
                 <IonButton class="booster-button" onClick={() => updateBoost(state.boost - state.settings.boostStep)}>
