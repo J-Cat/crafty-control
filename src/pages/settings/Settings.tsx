@@ -27,8 +27,8 @@ import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
 
 const Settings: React.FC<RouteComponentProps> = ({ history }) => {
   const { state, dispatch } = useContext(AppContext) as { state: ICraftyControlState, dispatch: React.Dispatch<IAction> };
-  const [vibration, setVibration] = useState(false);
-  const [charge, setCharge] = useState(false);
+  const [vibration, setVibration] = useState(() => ((state.craftySettings & 1) !== 1));
+  const [charge, setCharge] = useState(() => ((state.craftySettings & 2) !== 2));
   const [led, setLed] = useState(-1);
   let newLed: number | undefined;
 
@@ -47,7 +47,7 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
       console.log(`SET LED: ${state.led}`);
       setLed(state.led);
     }
-  }, [state.craftySettings, state.led, led, charge, vibration]);
+  }, [state.led, led]);
 
   const onUnitsChanged = (event: CustomEvent<SelectChangeEventDetail>) => {
     const value = (event.target as any).value as TemperatureUnit;
@@ -64,6 +64,7 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
     const checked = (state.craftySettings & 1) === 1;
     if (vibration !== checked) {
       const value = (state.craftySettings & 2) | (checked ? 0 : 1);
+      console.log(`updating settings: ${value}`);
       CraftyControl.updateCraftySettings(value).then(() => {
         dispatch({ type: CraftyControlActions.updateSettings, payload: value });
         setVibration(!vibration);
@@ -79,10 +80,14 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
     const checked = (state.craftySettings & 2) === 2;
     if (charge !== checked) {
       const value = (state.craftySettings & 1) | (checked ? 0 : 2);
+      console.log(`updating settings: ${value}`);
       CraftyControl.updateCraftySettings(value).then(() => {
         dispatch({ type: CraftyControlActions.updateSettings, payload: value });
         setCharge(!charge);
-      });
+      }).catch(reason => {
+        dispatch({ type: CraftyControlActions.updateSettings, payload: state.craftySettings });
+        console.log('Error updating characteristic.');
+      })
     }
   }
 

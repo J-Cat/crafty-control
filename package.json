@@ -1,6 +1,6 @@
 {
   "name": "crafty-control",
-  "version": "0.0.1",
+  "version": "1.0.0-beta",
   "private": true,
   "dependencies": {
     "@ionic/react": "^4.11.0",
