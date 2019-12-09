@@ -1,6 +1,6 @@
 {
   "name": "crafty-control",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta",
   "private": true,
   "dependencies": {
     "@ionic/react": "^4.11.0",
@@ -25,9 +25,9 @@
     "typescript-task-queue": "^1.0.4"
   },
   "scripts": {
-    "ionic:watch:before": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version')",
-    "start": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-scripts start",
-    "build": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-scripts build",
+    "ionic:build:before": "set PUBLIC_URL=https://github.cataford.com/crafty/",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -50,6 +50,7 @@
   "description": "Crafty Control Application",
   "devDependencies": {
     "@types/date-fns": "^2.6.0",
-    "@types/web-bluetooth": "0.0.4"
+    "@types/web-bluetooth": "0.0.4",
+    "cross-env": "^6.0.3"
   }
 }

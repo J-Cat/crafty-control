@@ -23,6 +23,8 @@ import { IAction } from '../../state/IAction';
 import { Redirect } from 'react-router';
 import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
 
+const version = require('../../../package.json').version;
+
 const Home: React.FC = () => {
   const { state } = useContext(AppContext) as { state: ICraftyControlState, dispatch: React.Dispatch<IAction> };
   const [sp, setSP] = useState(-1);
@@ -64,7 +66,7 @@ const Home: React.FC = () => {
   return (
     !state.connected ? <Redirect to="/connect" /> :
       <IonPage>
-        <IonLabel class="version-label">{process.env.REACT_APP_VERSION}</IonLabel>
+        <IonLabel class="version-label">{version}</IonLabel>
         <IonHeader>
           <IonToolbar>
             <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />

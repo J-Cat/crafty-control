@@ -8,6 +8,7 @@
   left: 5px;
   font-size: .8em;
   opacity: 0.5;
+  z-index: 1000;
 }
 
 .content ion-list {
