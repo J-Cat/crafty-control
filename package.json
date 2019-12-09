@@ -21,11 +21,13 @@
     "react-router-dom": "^5.1.0",
     "react-scripts": "3.2.0",
     "react-visual-graphic": "^0.2.0",
-    "typescript": "3.6.3"
+    "typescript": "3.6.3",
+    "typescript-task-queue": "^1.0.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "ionic:watch:before": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version')",
+    "start": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-scripts start",
+    "build": "REACT_APP_VERSION=$(node -pe 'require(\"./package.json\").version') react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

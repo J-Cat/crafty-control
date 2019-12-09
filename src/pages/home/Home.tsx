@@ -64,6 +64,7 @@ const Home: React.FC = () => {
   return (
     !state.connected ? <Redirect to="/connect" /> :
       <IonPage>
+        <IonLabel class="version-label">{process.env.REACT_APP_VERSION}</IonLabel>
         <IonHeader>
           <IonToolbar>
             <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />

@@ -1,6 +1,15 @@
 :host(open) .inner-scroll {
       display: flex;
 }
+
+.version-label {
+  position: absolute;
+  bottom: 60px;
+  left: 5px;
+  font-size: .8em;
+  opacity: 0.5;
+}
+
 .content ion-list {
     width: 100%; 
     height: 100%;

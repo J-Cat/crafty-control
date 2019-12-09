@@ -13,6 +13,7 @@ export const CraftyControlActions = {
     updateUnits: 'CRAFTY/UPDATE_UNITS',
     updateSettings: 'CRAFTY/UPDATE_SETTINGS',
     updating: 'CRAFTY/UPDATING',
+    updated: 'CRAFTY/UPDATED',
     setSerial: 'CRAFTY/SET_SERIAL',
     setModel: 'CRAFTY/SET_MODEL',
     setVersion: 'CRAFTY/SET_VERSION',

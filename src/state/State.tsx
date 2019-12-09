@@ -135,6 +135,13 @@ const reducer = (state: ICraftyControlState = initialState, action: IAction) => 
         };
     }
 
+    case CraftyControlActions.updated: {
+        return {
+            ...state,
+            updating: false
+        };
+    }
+
     case CraftyControlActions.setSerial: {
         return {
             ...state,
