@@ -2,6 +2,7 @@ export interface ICharacteristicInfo {
     uuid: string;
     label: string; 
     type: string; 
+    notify?: boolean;
     suffix?: string;
     value?: string|number;
     divider?: number;

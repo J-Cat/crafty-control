@@ -110,7 +110,7 @@ class WebBluetoothCraftyControl implements ICraftyControl {
             });
         }
 
-        for (const item of CraftyUuids.otherUuids) {
+        for (const item of CraftyUuids.otherUuids.filter(u => u.notify)) {
             let characteristic: BluetoothRemoteGATTCharacteristic | undefined;
             if (item.uuid.substring(7) === metaDataService.uuid.substring(7)) {
                 characteristic = await metaDataService.getCharacteristic(item.uuid);
@@ -118,7 +118,7 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                 characteristic = await miscService.getCharacteristic(item.uuid);
             }
 
-            if (characteristic && characteristic.properties.notify) {
+            if (characteristic) {
                 await characteristic.startNotifications();
                 characteristic.oncharacteristicvaluechanged = async (event) => {
                     this.queue.enqueue(async () => {

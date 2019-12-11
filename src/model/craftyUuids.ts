@@ -19,7 +19,7 @@ export const CraftyUuids = {
         DesignUuid: "00000183-4c45-4b43-4942-265a524f5453",
     },
     otherUuids: [
-        { uuid: '00000153-4c45-4b43-4942-265a524f5453', label: 'Battery Remaining', type: 'hex', suffix: 'mah' },
+        { uuid: '00000153-4c45-4b43-4942-265a524f5453', label: 'Battery Remaining', type: 'hex', suffix: 'mah', notify: false},
         { uuid: '00000143-4c45-4b43-4942-265a524f5453', label: 'Battery Capacity', type: 'hex', suffix: 'mah' },
         { uuid: '00000183-4c45-4b43-4942-265a524f5453', label: 'Battery Design Capacity', type: 'hex', suffix: 'mah' },
         { uuid: '00000163-4c45-4b43-4942-265a524f5453', label: 'Discharge Cycles', type: 'hex' },
@@ -29,7 +29,7 @@ export const CraftyUuids = {
         { uuid: '00000042-4c45-4b43-4942-265a524f5453', label: 'Bluetooth Address', type: 'hex' },
         { uuid: '00000043-4c45-4b43-4942-265a524f5453', label: 'PCB Version', type: 'hex' },
         { uuid: '000000f3-4c45-4b43-4942-265a524f5453', label: 'Current Temperature (PT1000)', type: 'hex', suffix: '°c', divider: 10},
-        { uuid: '00000103-4c45-4b43-4942-265a524f5453', label: 'Adjusted Current Temperature (PT1000)', type: 'hex', suffix: '°c', divider: 10 },
+        { uuid: '00000103-4c45-4b43-4942-265a524f5453', label: 'Adjusted Current Temperature (PT1000)', type: 'hex', suffix: '°c', divider: 10},
         { uuid: '00000113-4c45-4b43-4942-265a524f5453', label: 'Accu Temperature', type: 'hex', suffix: '°c', divider: 10 },
         { uuid: '00000123-4c45-4b43-4942-265a524f5453', label: 'Accu Temperature Min', type: 'hex', suffix: '°c', divider: 10 },
         { uuid: '00000133-4c45-4b43-4942-265a524f5453', label: 'Accu Temperature Max', type: 'hex', suffix: '°c', divider: 10 },
