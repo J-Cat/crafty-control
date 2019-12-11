@@ -1,3 +1,12 @@
+export interface ICharacteristicInfo {
+    uuid: string;
+    label: string; 
+    type: string; 
+    suffix?: string;
+    value?: string|number;
+    divider?: number;
+}
+
 export enum TemperatureUnit {
     'F',
     'C'
@@ -14,7 +23,10 @@ export interface ICraftyControlState {
         version: string;
         model: string;
         hoursOfOperation: number;
-        data: (string|number)[];
+        powerState: number;
+        data: { 
+            [uuid: string]: ICharacteristicInfo;
+        };
     }
     readonly connecting: boolean;
     readonly connected: boolean;

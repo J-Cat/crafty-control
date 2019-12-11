@@ -11,6 +11,20 @@
   z-index: 1000;
 }
 
+.power-icon { 
+  animation: blink 2s ease-in infinite;
+  color: var(--ion-color-primary);
+  height: 30px;
+  width: 30px;
+  margin: auto;
+  padding-right: 10px;
+}
+
+@keyframes blink {
+  from, to { opacity: 1 }
+  50% { opacity: 0 }
+}
+
 .content ion-list {
     width: 100%; 
     height: 100%;

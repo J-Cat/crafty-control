@@ -1,7 +1,7 @@
 import React from 'react';
 import { CraftyControlActions } from './CraftyControlActions';
 import { IAction } from './IAction';
-import { ICraftyControlState, TemperatureUnit } from './ICraftyControlState';
+import { ICraftyControlState, TemperatureUnit, ICharacteristicInfo } from './ICraftyControlState';
 
 const units = localStorage.getItem('crafty-control-units');
 const setPointStep = localStorage.getItem('crafty-control-setpoint-step');
@@ -18,7 +18,8 @@ const initialState: ICraftyControlState = {
         model: '',
         version: '',
         hoursOfOperation: 0,
-        data: []
+        powerState: 0,
+        data: {},
     },
     connecting: false,
     connected: false,
@@ -178,6 +179,30 @@ const reducer = (state: ICraftyControlState = initialState, action: IAction) => 
             info: {
                 ...state.info,
                 version: action.payload as string
+            }
+        };
+    }
+
+    case CraftyControlActions.setPowerState: {
+        return {
+            ...state,
+            info: {
+                ...state.info,
+                powerState: action.payload as number,
+            }
+        };
+    }
+
+    case CraftyControlActions.setData: {
+        const payload  = action.payload as ICharacteristicInfo;
+        return {
+            ...state,
+            info: {
+                ...state.info,
+                data: {
+                    ...state.info.data, 
+                    [payload.uuid]: payload
+                }
             }
         };
     }

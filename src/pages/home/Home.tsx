@@ -14,7 +14,7 @@ import {
   IonRow,
   IonAlert
 } from '@ionic/react';
-import { add, remove } from 'ionicons/icons';
+import { add, remove, batteryCharging, power } from 'ionicons/icons';
 import React, { useContext, useState, useEffect } from 'react';
 import './Home.css';
 import { AppContext } from '../../state/State';
@@ -71,6 +71,7 @@ const Home: React.FC = () => {
           <IonToolbar>
             <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{ textAlign: 'center', paddingRight: 56 }}>Crafty Control</IonTitle>
+            <IonIcon slot="end" className="power-icon" icon={(state.info.powerState & 32900) === 32900 ? batteryCharging : (state.info.powerState & 32) === 32 ? power : ''} hidden={(state.info.powerState & 32932) === 0} />
           </IonToolbar>
         </IonHeader>
         <IonContent class="content" scrollX={false} scrollY={false} fullscreen={true}>

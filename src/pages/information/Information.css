@@ -1,11 +1,15 @@
 .info-content ion-list {
-    height: 100%;
     text-align: center;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-  }
+    overflow-y: auto;
+    align-items: center;
+}
+
+.info-content ion-list ion-item-group {
+}
 
 .info-content ion-list ion-list-header {
   background-color: var(--ion-tab-bar-color-activated);
@@ -14,8 +18,19 @@
   flex: 0;
 }
 
-.info-content ion-list ion-list-header ion-label {
+.info-content ion-list ion-item-group ion-item .label {
+  flex: 1;
+  overflow: visible;
+  margin: 2px 5px 2px 5px;
 }
+
+.info-content ion-list ion-item-group ion-item .value {
+  flex: 1;
+  text-align: right;
+  overflow: visible;
+  margin: 2px 5px 2px 5px;
+}
+
 
 .info-content ion-list .spacer {
   flex: 1;
@@ -25,7 +40,6 @@
   text-align: left;
   display: flex;
   margin: auto;
-  min-width: 300px;
 }
 
 .info-content ion-list ion-item ion-label {
@@ -39,7 +53,6 @@
 .info-content ion-list ion-item ion-select {
   flex: 1;
   text-align: right;
-  width: 100px;
 }
 
 .info-content ion-list .led-item {
@@ -47,5 +60,5 @@
 }
 
 .info-content ion-list .led-item ion-label {
-  width: 270px;
+  overflow-x: visible;
 }

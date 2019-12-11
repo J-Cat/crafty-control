@@ -1,10 +1,12 @@
 import { ICraftyControl } from './ICraftyControl';
 import { CraftyUuids } from '../model/craftyUuids';
 import { CraftyControlActions } from '../state/CraftyControlActions';
-import { TemperatureUnit } from '../state/ICraftyControlState';
+import { TemperatureUnit, ICharacteristicInfo } from '../state/ICraftyControlState';
 import { IAction } from '../state/IAction';
 import { isNumber } from 'util';
 import { TaskQueue } from 'typescript-task-queue';
+
+const decoder = new TextDecoder('utf8');
 
 class WebBluetoothCraftyControl implements ICraftyControl {
     units: TemperatureUnit = TemperatureUnit.C;
@@ -16,6 +18,7 @@ class WebBluetoothCraftyControl implements ICraftyControl {
     settingsCharacteristic?: BluetoothRemoteGATTCharacteristic;
     ledCharacteristic?: BluetoothRemoteGATTCharacteristic;
     batteryCharacteristic?: BluetoothRemoteGATTCharacteristic;
+    powerStateCharacteristic?: BluetoothRemoteGATTCharacteristic;
 
     private queue: TaskQueue = new TaskQueue({ autorun: true, stoppable: false });
 
@@ -58,6 +61,19 @@ class WebBluetoothCraftyControl implements ICraftyControl {
         await this.getMetaDataCharacteristics(metaDataService);
         await this.getMiscCharacteristics(miscService);
 
+        await this.getOtherCharacteristics(dataService);
+        await this.getOtherCharacteristics(metaDataService);
+        await this.getOtherCharacteristics(miscService);
+
+        await this.bindCharacteristics(metaDataService, miscService);
+
+        this.dispatch!({ type: CraftyControlActions.connected });
+    }
+
+    private bindCharacteristics = async (
+        metaDataService: BluetoothRemoteGATTService, 
+        miscService: BluetoothRemoteGATTService
+    ) => {
         await this.temperatureCharacteristic!.startNotifications();
         this.temperatureCharacteristic!.oncharacteristicvaluechanged = async (event) => {
             this.queue.enqueue(async () => {
@@ -67,6 +83,7 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                 }
             });
         };
+
         await this.batteryCharacteristic!.startNotifications();
         this.batteryCharacteristic!.oncharacteristicvaluechanged = async (event) => {
             this.queue.enqueue(async () => {
@@ -74,13 +91,65 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                 if (value) {
                     const batteryPercent = value.getUint16(0, true);
                     if (batteryPercent && isNumber(batteryPercent)) {
-                        this.dispatch!({ type: CraftyControlActions.setBatteryPercent, payload: batteryPercent })
+                        this.dispatch!({ type: CraftyControlActions.setBatteryPercent, payload: batteryPercent });
                     }
                 }
             });
         }
 
-        this.dispatch!({ type: CraftyControlActions.connected });
+        await this.powerStateCharacteristic!.startNotifications();
+        this.powerStateCharacteristic!.oncharacteristicvaluechanged = async (event) => {
+            this.queue.enqueue(async () => {
+                const value = await this.powerStateCharacteristic!.readValue();
+                if (value) {
+                    const powerState = value.getUint16(0, true);
+                    if (isNumber(powerState)) {
+                        this.dispatch!({ type: CraftyControlActions.setPowerState, payload: powerState });
+                    }
+                }
+            });
+        }
+
+        for (const item of CraftyUuids.otherUuids) {
+            let characteristic: BluetoothRemoteGATTCharacteristic | undefined;
+            if (item.uuid.substring(7) === metaDataService.uuid.substring(7)) {
+                characteristic = await metaDataService.getCharacteristic(item.uuid);
+            } else if (item.uuid.substring(7) === miscService.uuid.substring(7)) {
+                characteristic = await miscService.getCharacteristic(item.uuid);
+            }
+
+            if (characteristic && characteristic.properties.notify) {
+                await characteristic.startNotifications();
+                characteristic.oncharacteristicvaluechanged = async (event) => {
+                    this.queue.enqueue(async () => {
+                        if (item.type === 'hex') {
+                            const value = await characteristic!.readValue();
+                            if (value) {
+                                const numberValue = value.getUint16(0, true);
+                                if (numberValue && isNumber(numberValue)) {
+                                    this.dispatch!({ type: CraftyControlActions.setData, payload: {
+                                        ...item,
+                                        value: numberValue,
+                                    } as ICharacteristicInfo });
+                                }
+                            }
+                        } else {
+                            const value = await characteristic!.readValue();
+                            if (value) {
+                                const stringValue = decoder.decode(value.buffer);
+                                if (stringValue) {
+                                    this.dispatch!({ type: CraftyControlActions.setData, payload: {
+                                        ...item,
+                                        value: stringValue,
+                                    } as ICharacteristicInfo});
+                                }
+                            }
+        
+                        }
+                    });
+                };
+            }
+        }
     }
 
     private getDataServiceCharacteristics = async (service: BluetoothRemoteGATTService) => {
@@ -156,11 +225,21 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                 this.dispatch!({ type: CraftyControlActions.setHoursOfOperation, payload: hours });
             }
         }
+
+        this.powerStateCharacteristic = await service.getCharacteristic(CraftyUuids.PowerUuid);
+        if (!this.powerStateCharacteristic) {
+            throw new Error("Failed to retrieve the power state characteristic.");
+        }
+        const powerStateValue = await this.powerStateCharacteristic.readValue();
+        if (powerStateValue) {
+            const powerState = powerStateValue.getUint16(0, true);
+            if (powerState && isNumber(powerState)) {
+                this.dispatch!({ type: CraftyControlActions.setPowerState, payload: powerState });
+            }
+        }
     }
 
     private getMetaDataCharacteristics = async (service: BluetoothRemoteGATTService) => {
-        const decoder = new TextDecoder('utf8');
-
         const serialCharacteristic = await service.getCharacteristic(CraftyUuids.SerialUuid);
         if (!serialCharacteristic) {
             throw new Error("Failed to retrieve the serial # characteristic.");
@@ -194,6 +273,40 @@ class WebBluetoothCraftyControl implements ICraftyControl {
             const version = decoder.decode(versionValue.buffer);
             if (version) {
                 this.dispatch!({ type: CraftyControlActions.setVersion, payload: version });
+            }
+        }
+    }
+
+    private getOtherCharacteristics = async (service: BluetoothRemoteGATTService) => {
+        for (const item of CraftyUuids.otherUuids) {
+            if (item.uuid.substring(7) === service.uuid.substring(7)) {
+                const characteristic = await service.getCharacteristic(item.uuid);
+                if (characteristic) {
+                    if (item.type === 'hex') {
+                        const value = await characteristic.readValue();
+                        if (value) {
+                            const numberValue = value.getUint16(0, true);
+                            if (numberValue && isNumber(numberValue)) {
+                                this.dispatch!({ type: CraftyControlActions.setData, payload: { 
+                                    ...item,
+                                    value: numberValue,
+                                } as ICharacteristicInfo});
+                            }
+                        }
+                    } else {
+                        const value = await characteristic.readValue();
+                        if (value) {
+                            const stringValue = decoder.decode(value.buffer);
+                            if (stringValue) {
+                                this.dispatch!({ type: CraftyControlActions.setData, payload: { 
+                                    ...item,
+                                    value: stringValue,
+                                } as ICharacteristicInfo});
+                            }
+                        }
+
+                    }
+                }
             }
         }
     }

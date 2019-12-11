@@ -20,4 +20,6 @@ export const CraftyControlActions = {
     setHoursOfOperation: 'CRAFTY/SET_HOURS_OF_OP',
     setPointStepChanged: 'CRAFTY/SETPOINT_STEP',
     boostStepChanged: 'CRAFTY/BOOST_STEP',
+    setData: 'CRAFTY/SET_DATA',
+    setPowerState: 'CRAFTY/SET_POWER_STATE',
 };

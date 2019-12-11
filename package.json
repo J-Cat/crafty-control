@@ -25,7 +25,7 @@
     "typescript-task-queue": "^1.0.4"
   },
   "scripts": {
-    "ionic:build:before": "set PUBLIC_URL=https://github.cataford.com/crafty/",
+    "ionic:build:before": "cross-env-shell PUBLIC_URL=https://github.cataford.com/crafty/",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
