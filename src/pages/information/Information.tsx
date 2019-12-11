@@ -85,7 +85,7 @@ const Information: React.FC<RouteComponentProps> = () => {
                 return (
                   <IonItem>
                     <IonLabel className="label">{item.label}</IonLabel>
-                    <IonLabel className="value">{item.type === 'hex' ? ((item.value as number)/(item.divider || 1)).toFixed(Math.floor((item.divider || 0)/10)) : item.value + (item.suffix || '')}</IonLabel>
+                    <IonLabel className="value">{(item.type === 'hex' ? ((item.value as number)/(item.divider || 1)).toFixed(Math.floor((item.divider || 0)/10)) : item.value) + (item.suffix || '')}</IonLabel>
                   </IonItem>
                 );
               })}

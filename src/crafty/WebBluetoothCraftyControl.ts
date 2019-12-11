@@ -36,6 +36,10 @@ class WebBluetoothCraftyControl implements ICraftyControl {
             throw new Error("Failed to retrieve Crafty BLE device.");
         }
 
+        device.ongattserverdisconnected = (event: Event) => {
+            dispatch!({type: CraftyControlActions.disconnected });
+        };
+
         this.dispatch!({ type: CraftyControlActions.connecting });
         const server = await device.gatt.connect();
 
@@ -74,18 +78,16 @@ class WebBluetoothCraftyControl implements ICraftyControl {
         metaDataService: BluetoothRemoteGATTService, 
         miscService: BluetoothRemoteGATTService
     ) => {
-        await this.temperatureCharacteristic!.startNotifications();
-        this.temperatureCharacteristic!.oncharacteristicvaluechanged = async (event) => {
+        this.temperatureCharacteristic!.addEventListener("characteristicvaluechanged", async (event) => {
             this.queue.enqueue(async () => {
                 const value = await this.readTemp(this.units, this.temperatureCharacteristic!);
                 if (value && isNumber(value)) {
                     this.dispatch!({ type: CraftyControlActions.setCurrentTemperature, payload: value })
                 }
             });
-        };
+        });
 
-        await this.batteryCharacteristic!.startNotifications();
-        this.batteryCharacteristic!.oncharacteristicvaluechanged = async (event) => {
+        this.batteryCharacteristic!.addEventListener('characteristicvaluechanged', async (event) => {
             this.queue.enqueue(async () => {
                 const value = await this.batteryCharacteristic!.readValue();
                 if (value) {
@@ -95,10 +97,9 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                     }
                 }
             });
-        }
+        });
 
-        await this.powerStateCharacteristic!.startNotifications();
-        this.powerStateCharacteristic!.oncharacteristicvaluechanged = async (event) => {
+        this.powerStateCharacteristic!.addEventListener('characteristicvaluechanged', async (event) => {
             this.queue.enqueue(async () => {
                 const value = await this.powerStateCharacteristic!.readValue();
                 if (value) {
@@ -108,8 +109,9 @@ class WebBluetoothCraftyControl implements ICraftyControl {
                     }
                 }
             });
-        }
+        });
 
+        const characteristics: BluetoothRemoteGATTCharacteristic[] = [];
         for (const item of CraftyUuids.otherUuids.filter(u => u.notify)) {
             let characteristic: BluetoothRemoteGATTCharacteristic | undefined;
             if (item.uuid.substring(7) === metaDataService.uuid.substring(7)) {
@@ -119,8 +121,8 @@ class WebBluetoothCraftyControl implements ICraftyControl {
             }
 
             if (characteristic) {
-                await characteristic.startNotifications();
-                characteristic.oncharacteristicvaluechanged = async (event) => {
+                characteristics.push(characteristic);
+                characteristic.addEventListener('characteristicvaluechanged', async (event) => {
                     this.queue.enqueue(async () => {
                         if (item.type === 'hex') {
                             const value = await characteristic!.readValue();
@@ -147,8 +149,16 @@ class WebBluetoothCraftyControl implements ICraftyControl {
         
                         }
                     });
-                };
+                });
             }
+        }
+
+        this.temperatureCharacteristic!.startNotifications();
+        this.batteryCharacteristic!.startNotifications();
+        this.powerStateCharacteristic!.startNotifications();
+
+        for (const characteristic of characteristics) {
+            characteristic.startNotifications();
         }
     }
 
