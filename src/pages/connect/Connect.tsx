@@ -11,7 +11,8 @@ import {
     IonButton,
     IonImg,
     IonLoading,
-    IonAlert
+    IonAlert,
+    IonCheckbox
   } from '@ionic/react';
   import React, { useContext, useState } from 'react';
   import './Connect.css';
@@ -21,21 +22,27 @@ import { ICraftyControlState } from '../../state/ICraftyControlState';
 import { IAction } from '../../state/IAction';
 import { RouteComponentProps } from 'react-router';
 import { CraftyControlActions } from '../../state/CraftyControlActions';
+import { CheckboxChangeEventDetail } from '@ionic/core';
 const version = require('../../../package.json').version;
   
 const Connect: React.FC<RouteComponentProps> = ({history}) => {
     const { state, dispatch } = useContext(AppContext) as {state: ICraftyControlState, dispatch: React.Dispatch<IAction>};
     const [ connectAlert, setConnectAlert ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState('');
+    const [ detailed, setDetailed ] = useState(false);
 
     const connectBLE = () => {
-      CraftyControl.connect(state.settings.units, dispatch).then(() => {
+      CraftyControl.connect(state.settings.units, detailed, dispatch).then(() => {
         history.push('/home');
       }).catch(reason => {
         dispatch({type: CraftyControlActions.disconnected});
         setErrorMessage(reason);
         setConnectAlert(true);
       });
+    };
+
+    const detailedOnChange = (event: CustomEvent<CheckboxChangeEventDetail>) => {
+      setDetailed(event.detail.checked);
     };
   
     return (
@@ -47,14 +54,18 @@ const Connect: React.FC<RouteComponentProps> = ({history}) => {
             <IonTitle style={{textAlign: 'center', paddingRight: 56}}>Crafty Control</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent class="content" scrollX={false} scrollY={false} fullscreen={true}>
+        <IonContent class="connect-content" scrollX={false} scrollY={false} fullscreen={true}>
           <IonList lines="none">
             <IonListHeader>
               <IonLabel>Connect</IonLabel>
             </IonListHeader>
             <IonItem class="spacer" />
-            <IonItem onClick={connectBLE} hidden={state.connecting || state.connected}>
-              <IonButton size="large">Connect to Crafty</IonButton>
+            <IonItem hidden={state.connecting || state.connected}>
+              <IonButton onClick={connectBLE} size="large">Connect to Crafty</IonButton>
+            </IonItem>
+            <IonItem hidden={state.connecting || state.connected}>
+              <IonCheckbox checked={detailed} onIonChange={detailedOnChange} slot="start" />
+              <IonLabel>Get Detailed Information?</IonLabel>
             </IonItem>
             <IonItem class="spacer" />
           </IonList>

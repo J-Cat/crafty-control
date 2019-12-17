@@ -24,7 +24,11 @@ export interface ICraftyControlState {
         version: string;
         model: string;
         hoursOfOperation: number;
-        powerState: number;
+        powerState: boolean;
+        heatingState: boolean;
+        boostState: boolean;
+        chargingState: boolean;
+        pluggedInState: boolean;
         data: { 
             [uuid: string]: ICharacteristicInfo;
         };

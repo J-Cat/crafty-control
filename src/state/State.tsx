@@ -18,7 +18,11 @@ const initialState: ICraftyControlState = {
         model: '',
         version: '',
         hoursOfOperation: 0,
-        powerState: 0,
+        powerState: false,
+        heatingState: false,
+        boostState: false,
+        chargingState: false,
+        pluggedInState: false,
         data: {},
     },
     connecting: false,
@@ -184,11 +188,16 @@ const reducer = (state: ICraftyControlState = initialState, action: IAction) => 
     }
 
     case CraftyControlActions.setPowerState: {
+        const value = action.payload as number[];
         return {
             ...state,
             info: {
                 ...state.info,
-                powerState: action.payload as number,
+                powerState: (value[1] & 0x10) === 0x10,
+                heatingState: (value[1] & 0x5) === 0x5,
+                boostState: (value[1] & 0x20) === 0x20,
+                chargingState: (value[2] === 0x2),
+                pluggedInState: (value[2] !== 0)
             }
         };
     }

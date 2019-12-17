@@ -22,6 +22,7 @@ import { CraftyUuids } from '../../model/craftyUuids';
 
 const Information: React.FC<RouteComponentProps> = () => {
   const { state } = useContext(AppContext) as { state: ICraftyControlState, dispatch: React.Dispatch<IAction> };
+  const otherUuids = Object.keys(state.info.data).filter(uuid => !Object.values(CraftyUuids.Battery).includes(uuid));
 
   return (
     !state.connected ? <Redirect to="/connect" /> :
@@ -75,12 +76,20 @@ const Information: React.FC<RouteComponentProps> = () => {
                 <IonLabel className="label">Design:</IonLabel>
                 <IonLabel className="value">{state.info.data[CraftyUuids.Battery.DesignUuid] ? state.info.data[CraftyUuids.Battery.DesignUuid].value : ''}mAh</IonLabel>
               </IonItem>
+              <IonItem>
+                <IonLabel className="label">Discharge Cycles:</IonLabel>
+                <IonLabel className="value">{state.info.data[CraftyUuids.Battery.DischargeCyclesUuid] ? state.info.data[CraftyUuids.Battery.DischargeCyclesUuid].value : ''}</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonLabel className="label">Charge Cycles:</IonLabel>
+                <IonLabel className="value">{state.info.data[CraftyUuids.Battery.ChargeCyclesUuid] ? state.info.data[CraftyUuids.Battery.ChargeCyclesUuid].value : ''}</IonLabel>
+              </IonItem>
             </IonItemGroup>
-            <IonItemGroup>
+            <IonItemGroup hidden={otherUuids.length === 0}>
               <IonItemDivider>
                 <IonLabel>Miscellaneous</IonLabel>
               </IonItemDivider>
-              {Object.keys(state.info.data).filter(uuid => !state.info.data[uuid].label.startsWith("Battery")).map((uuid) => {
+              {otherUuids.map((uuid) => {
                 const item = state.info.data[uuid];
                 return (
                   <IonItem>

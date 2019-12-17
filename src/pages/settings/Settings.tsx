@@ -39,9 +39,9 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
   useEffect(() => {
     let value = (state.craftySettings & 1) !== 1;
     if (vibration !== value) {
-      setVibration(value);  
+      setVibration(value);
     }
-    
+
     value = (state.craftySettings & 2) !== 2;
     if (charge !== value) {
       setCharge(value);
@@ -62,10 +62,12 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
   }, [state.craftySettings, vibration, charge, state.led, led, setPointStep, state.settings.setPointStep, boostStep, state.settings.boostStep]);
 
   const onUnitsChanged = (event: CustomEvent<SelectChangeEventDetail>) => {
-    const value = (event.target as any).value as TemperatureUnit;
-    CraftyControl.updateUnits(value).then(() => {
-      dispatch({ type: CraftyControlActions.updateUnits, payload: value })
-    });
+    if (event.detail.value) {
+      const value = event.detail.value;
+      CraftyControl.updateUnits(value).then(() => {
+        dispatch({ type: CraftyControlActions.updateUnits, payload: value })
+      });
+    }
   }
 
   const onVibrationChanged = (event: CustomEvent<ToggleChangeEventDetail>) => {
@@ -108,33 +110,39 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
       return;
     }
 
-    const value = (event.target as any).value;
-    newLed = value;
-    setLed(value);
-    
-    if (value !== state.led) {
-      setTimeout(() => {
-        console.log(`LED: ${value} ? ${newLed}`);
-        if (value === newLed) {
-          CraftyControl.updateLED(value).then(() => {
-            dispatch({ type: CraftyControlActions.setLED, payload: value });
-          });    
-        }
-      }, 500);
+    if (event.detail.value) {
+      const value = event.detail.value as number;
+      newLed = value;
+      setLed(value);
+
+      if (value !== state.led) {
+        setTimeout(() => {
+          console.log(`LED: ${value} ? ${newLed}`);
+          if (value === newLed) {
+            CraftyControl.updateLED(value).then(() => {
+              dispatch({ type: CraftyControlActions.setLED, payload: value });
+            });
+          }
+        }, 500);
+      }
     }
   }
 
   const onStepChanged = (event: CustomEvent<InputChangeEventDetail>) => {
-    const value = parseInt((event.target as any).value);
-  if (isNumber(value) && value > 0 && value <= 10) {
-      dispatch({ type: CraftyControlActions.setPointStepChanged, payload: value });
+    if (event.detail.value) {
+      const value = parseInt(event.detail.value);
+      if (isNumber(value) && value > 0 && value <= 10) {
+        dispatch({ type: CraftyControlActions.setPointStepChanged, payload: value });
+      }
     }
   }
 
   const onBoostStepChanged = (event: CustomEvent<InputChangeEventDetail>) => {
-    const value = parseInt((event.target as any).value);
-    if (isNumber(value) && value > 0 && value <= 5) {
-      dispatch({ type: CraftyControlActions.boostStepChanged, payload: value });
+    if (event.detail.value) {
+      const value = parseInt(event.detail.value);
+      if (isNumber(value) && value > 0 && value <= 5) {
+        dispatch({ type: CraftyControlActions.boostStepChanged, payload: value });
+      }
     }
   }
 

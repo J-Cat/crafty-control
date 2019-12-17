@@ -12,6 +12,14 @@
 }
 
 .power-icon { 
+  color: var(--ion-color-primary);
+  height: 30px;
+  width: 30px;
+  margin: auto;
+  padding-right: 10px;
+}
+
+.power-icon-flashing { 
   animation: blink 2s ease-in infinite;
   color: var(--ion-color-primary);
   height: 30px;

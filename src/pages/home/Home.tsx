@@ -71,7 +71,7 @@ const Home: React.FC = () => {
           <IonToolbar>
             <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{ textAlign: 'center', paddingRight: 56 }}>Crafty Control</IonTitle>
-            <IonIcon slot="end" className="power-icon" icon={(state.info.powerState & 32900) === 32900 ? batteryCharging : (state.info.powerState & 32) === 32 ? power : ''} hidden={(state.info.powerState & 32932) === 0} />
+            <IonIcon slot="end" className={(state.info.powerState && state.info.heatingState) || (!state.info.powerState && state.info.pluggedInState && state.info.chargingState) ? 'power-icon-flashing' : 'power-icon'} icon={state.info.powerState ? power : state.info.pluggedInState ? batteryCharging : ''} hidden={!state.info.powerState && !state.info.pluggedInState} />
           </IonToolbar>
         </IonHeader>
         <IonContent class="content" scrollX={false} scrollY={false} fullscreen={true}>

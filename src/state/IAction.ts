@@ -5,5 +5,6 @@ export interface IAction {
     readonly payload?: 
         number
         | string
+        | number[]
         | ICharacteristicInfo
 }
