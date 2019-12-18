@@ -22,6 +22,7 @@ import { ICraftyControlState, TemperatureUnit } from '../../state/ICraftyControl
 import { IAction } from '../../state/IAction';
 import { Redirect } from 'react-router';
 import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
+import CraftyLogo from '../../assets/favicon.png';
 
 const version = require('../../../package.json').version;
 
@@ -69,7 +70,7 @@ const Home: React.FC = () => {
         <IonLabel class="version-label">{version}</IonLabel>
         <IonHeader>
           <IonToolbar>
-            <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />
+            <IonImg slot="start" src={CraftyLogo} style={{ width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{ textAlign: 'center', paddingRight: 56 }}>Crafty Control</IonTitle>
             <IonIcon slot="end" className={(state.info.powerState && state.info.heatingState) || (!state.info.powerState && state.info.pluggedInState && state.info.chargingState) ? 'power-icon-flashing' : 'power-icon'} icon={state.info.powerState ? power : state.info.pluggedInState ? batteryCharging : ''} hidden={!state.info.powerState && !state.info.pluggedInState} />
           </IonToolbar>

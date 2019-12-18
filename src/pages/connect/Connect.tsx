@@ -23,6 +23,8 @@ import { IAction } from '../../state/IAction';
 import { RouteComponentProps } from 'react-router';
 import { CraftyControlActions } from '../../state/CraftyControlActions';
 import { CheckboxChangeEventDetail } from '@ionic/core';
+import CraftyLogo from '../../assets/favicon.png';
+
 const version = require('../../../package.json').version;
   
 const Connect: React.FC<RouteComponentProps> = ({history}) => {
@@ -50,7 +52,7 @@ const Connect: React.FC<RouteComponentProps> = ({history}) => {
         <IonLabel class="connect-version-label">{version}</IonLabel>
         <IonHeader>
           <IonToolbar>
-            <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{width: 40, height: 40, margin: 8 }} />
+            <IonImg slot="start" src={CraftyLogo} style={{width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{textAlign: 'center', paddingRight: 56}}>Crafty Control</IonTitle>
           </IonToolbar>
         </IonHeader>

@@ -19,6 +19,7 @@ import { ICraftyControlState } from '../../state/ICraftyControlState';
 import { IAction } from '../../state/IAction';
 import { RouteComponentProps, Redirect } from 'react-router';
 import { CraftyUuids } from '../../model/craftyUuids';
+import CraftyLogo from '../../assets/favicon.png';
 
 const Information: React.FC<RouteComponentProps> = () => {
   const { state } = useContext(AppContext) as { state: ICraftyControlState, dispatch: React.Dispatch<IAction> };
@@ -29,7 +30,7 @@ const Information: React.FC<RouteComponentProps> = () => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />
+            <IonImg slot="start" src={CraftyLogo} style={{ width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{ textAlign: 'center', paddingRight: 56 }}>Crafty Control</IonTitle>
           </IonToolbar>
         </IonHeader>

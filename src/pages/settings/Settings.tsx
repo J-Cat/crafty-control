@@ -26,6 +26,7 @@ import { SelectChangeEventDetail, ToggleChangeEventDetail, RangeChangeEventDetai
 import { CraftyControlActions } from '../../state/CraftyControlActions';
 import CraftyControl from '../../crafty/WebBluetoothCraftyControl';
 import { isNumber } from 'util';
+import CraftyLogo from '../../assets/favicon.png';
 
 const Settings: React.FC<RouteComponentProps> = ({ history }) => {
   const { state, dispatch } = useContext(AppContext) as { state: ICraftyControlState, dispatch: React.Dispatch<IAction> };
@@ -151,7 +152,7 @@ const Settings: React.FC<RouteComponentProps> = ({ history }) => {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonImg slot="start" src={`${process.env.PUBLIC_URL}/assets/icon/favicon.png`} style={{ width: 40, height: 40, margin: 8 }} />
+            <IonImg slot="start" src={CraftyLogo} style={{ width: 40, height: 40, margin: 8 }} />
             <IonTitle style={{ textAlign: 'center', paddingRight: 56 }}>Crafty Control</IonTitle>
           </IonToolbar>
         </IonHeader>
