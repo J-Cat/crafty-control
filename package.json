@@ -19,7 +19,7 @@
     "react-dom": "^16.10.2",
     "react-router": "^5.1.0",
     "react-router-dom": "^5.1.0",
-    "react-scripts": "3.2.0",
+    "react-scripts": "5.0.1",
     "react-visual-graphic": "^0.2.0",
     "typescript": "3.6.3",
     "typescript-task-queue": "^1.0.4"
